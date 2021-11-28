@@ -6,11 +6,13 @@
 #include <ctime>
 #include <cstdlib>
 #include <random>
+#include "sha3.h"
 #include <string>
 
 
 std::string gen_string()
 {
+    std::string ret_string;
     std::string first_gen = "abcdefgh";
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -51,13 +53,8 @@ std::string gen_string()
         randomize = rand() % 100;
     }
 
-    std::hash<std::string>hasher;
-    size_t hash = hasher(first_gen);
-    
-    //first_gen = hash;
-    //  std::cout << hash;
-    first_gen = std::to_string(hash);
-    //std::cout << first_gen;
+    SHA3 hash_str;
+    first_gen = hash_str(first_gen);
     std::uniform_int_distribution<> genc(0, 80);
     std::uniform_int_distribution<> num1(0, 8);
     std::uniform_int_distribution<> num2(0, 6);
@@ -89,18 +86,25 @@ std::string gen_string()
 
     }
    // std::cout << first_gen;
-    return first_gen;
+    ret_string = first_gen;
+    for (int i = 0; i < first_gen.length(); i++)
+    {
+        if (i >= first_gen.length() - 38)
+            ret_string[i] = ' ';
+        else
+        ret_string[i] = first_gen[i];
+    }
+    return ret_string;
 }
 
 int main(void)
 {
 
-    std::string s1, s2, s3;
+    std::string s1;
     s1 = gen_string();
-    s2 = gen_string();
-    s3 = s1 + s2;
    
-    std::cout << s3 << "\n";
+   
+    std::cout << s1 << "\n";
     
     
         
